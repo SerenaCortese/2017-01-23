@@ -1,7 +1,6 @@
 package it.polito.tdp.borders.model;
 /**
  * Oggetto per restituire la lista di stati e numero di stati confinanti al controller dal model.
- * @author sere9
  *
  */
 public class CountryAndNumber implements Comparable<CountryAndNumber>{

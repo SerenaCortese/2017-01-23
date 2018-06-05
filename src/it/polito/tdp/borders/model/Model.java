@@ -2,6 +2,7 @@ package it.polito.tdp.borders.model;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +20,8 @@ public class Model {
 	private List<Country> countries;
 	private Map<Integer,Country> countriesMap;
 	
+	private Simulator sim ;
+	
 	public Model() {
 		
 		
@@ -30,7 +33,7 @@ public class Model {
 		
 		//vertici
 		this.countries = dao.getCountriesFromYear(anno);
-		this.countriesMap = new HashMap();//lo faccio così senza IdMap e non direttaemnte nel dao perché tanto lo uso solo qui
+		this.countriesMap = new HashMap<>();//lo faccio così senza IdMap e non direttaemnte nel dao perché tanto lo uso solo qui
 		for(Country c: this.countries) {
 			this.countriesMap.put(c.getcCode(), c);
 		}
@@ -54,6 +57,43 @@ public class Model {
 		}
 		Collections.sort(list);
 		return list;
+	}
+
+	public List<Country> getCountries() {
+		return countries;
+	}
+
+	public void simula(Country partenza) {
+		this.sim = new Simulator();
+		this.sim.init(graph, partenza);
+		this.sim.run();
+		
+	}
+
+	public int getTSimulazione() {
+		return this.sim.getT();
+	}
+
+	public List<CountryAndNumber> getCountriesStanziali() {
+		
+		//converto mappa in lista(cambio significato del num in CountryAndNumber) e la ordino DECRESCENTE per numero
+		Map<Country,Integer> mappa = this.sim.getStanziali();
+		List<CountryAndNumber> result = new ArrayList<>();
+		
+		for(Country c : mappa.keySet()) {
+			result.add(new CountryAndNumber(c, mappa.get(c)));
+		}
+		
+		Collections.sort(result, new Comparator<CountryAndNumber>() {
+				//così crea classe anonima che implementa interfaccia Comparator e ne crea un oggetto con questi metodi implementati
+			@Override
+			public int compare(CountryAndNumber o1, CountryAndNumber o2) {
+				return o2.getNumber()-o1.getNumber();
+			}
+			
+		});
+		
+		return result;
 	}
 
 }

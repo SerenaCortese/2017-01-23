@@ -53,7 +53,7 @@ public class BordersDAO {
 	
 	public List<Country> getCountriesFromYear(int anno){
 		//voglio country che hanno almeno una relazione di continuità in anni minori o uguali a quello specificato
-		String sql = "SELECT * FROM country WHERE CCode in (SELECT state1no FROM contiguity WHERE year <= ? AND conttype = 1)";
+		String sql = "SELECT * FROM country WHERE CCode in (SELECT state1no FROM contiguity WHERE year <= ? AND conttype = 1) ORDER BY StateNme ASC ";
 		
 		try {
 			Connection conn = DBConnect.getConnection() ;
